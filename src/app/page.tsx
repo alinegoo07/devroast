@@ -1,65 +1,158 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import Link from "next/link";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ToggleSwitch } from "@/components/ui/toggle-switch";
+
+export default function HomePage() {
+  const [roastMode, setRoastMode] = useState(true);
+  const [code, setCode] = useState("");
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <main className="min-h-[calc(100vh-3.5rem)] bg-background flex flex-col items-center px-10 pt-20">
+      <div className="w-full max-w-[780px] flex flex-col gap-8">
+        {/* Hero Title */}
+        <div className="flex flex-col gap-3">
+          <h1 className="font-mono text-4xl font-bold flex items-center gap-3">
+            <span className="text-primary">&gt;</span>
+            <span className="text-foreground">
+              paste your code. get roasted.
+            </span>
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="font-mono text-sm text-muted-foreground">
+            {
+              "// drop your code below and we'll rate it — brutally honest or full roast mode"
+            }
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Code Input */}
+        <div className="border border-border rounded-md bg-input overflow-hidden">
+          {/* Window Header */}
+          <div className="h-10 px-4 border-b border-border flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full bg-red-500" />
+            <span className="h-3 w-3 rounded-full bg-amber-500" />
+            <span className="h-3 w-3 rounded-full bg-green-500" />
+          </div>
+          {/* Code Area */}
+          <textarea
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            placeholder="// paste your code here..."
+            className="w-full h-[320px] p-4 bg-transparent font-mono text-sm text-foreground placeholder:text-muted-foreground resize-none focus:outline-none"
+          />
         </div>
-      </main>
-    </div>
+
+        {/* Actions Bar */}
+        <div className="flex items-center justify-between">
+          <ToggleSwitch checked={roastMode} onChange={setRoastMode}>
+            <span className="text-xs text-muted-foreground">
+              {"// maximum sarcasm enabled"}
+            </span>
+          </ToggleSwitch>
+
+          <Button>$ roast_my_code</Button>
+        </div>
+
+        {/* Footer Stats */}
+        <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground font-mono">
+          <span>2,847 codes roasted</span>
+          <span>·</span>
+          <span>avg score: 4.2/10</span>
+        </div>
+
+        {/* Spacer */}
+        <div className="h-15" />
+
+        {/* Leaderboard Preview */}
+        <div className="w-full max-w-[960px] flex flex-col gap-6">
+          <div className="flex items-center justify-between">
+            <h2 className="font-mono text-sm text-muted-foreground">
+              {"// the worst code on the internet, ranked by shame"}
+            </h2>
+            <Link
+              href="/leaderboard"
+              className="text-sm text-muted-foreground hover:text-foreground font-mono transition-colors"
+            >
+              view all &gt;&gt;
+            </Link>
+          </div>
+
+          {/* Leaderboard Table */}
+          <div className="border border-border rounded-md overflow-hidden">
+            {/* Header */}
+            <div className="h-10 px-5 border-b border-border flex items-center bg-bg-surface">
+              <span className="w-10 text-muted-foreground font-mono text-xs">
+                #
+              </span>
+              <span className="w-16 text-muted-foreground font-mono text-xs">
+                score
+              </span>
+              <span className="flex-1 text-muted-foreground font-mono text-xs">
+                code preview
+              </span>
+              <span className="w-24 text-muted-foreground font-mono text-xs">
+                language
+              </span>
+            </div>
+
+            {/* Rows */}
+            {[
+              {
+                rank: 1,
+                score: 1.2,
+                code: "function calculateTotal(items) { var total = 0;",
+                lang: "javascript",
+              },
+              {
+                rank: 2,
+                score: 2.1,
+                code: "const result = arr.map(x => x * 2).filter(x => x > 10)",
+                lang: "javascript",
+              },
+              {
+                rank: 3,
+                score: 2.8,
+                code: "if (condition) { return true } else { return false }",
+                lang: "javascript",
+              },
+            ].map((item) => (
+              <div
+                key={item.rank}
+                className="h-14 px-5 border-b border-border flex items-center last:border-0"
+              >
+                <span className="w-10 text-muted-foreground font-mono text-xs">
+                  #{item.rank}
+                </span>
+                <span className="w-16 text-accent-red font-mono text-sm font-bold">
+                  {item.score}
+                </span>
+                <span className="flex-1 text-muted-foreground font-mono text-xs truncate">
+                  {item.code}
+                </span>
+                <span className="w-24 text-muted-foreground font-mono text-xs">
+                  {item.lang}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer Hint */}
+          <p className="text-center text-xs text-muted-foreground font-mono py-4">
+            showing top 3 of 2,847 &middot;{" "}
+            <Link
+              href="/leaderboard"
+              className="hover:text-foreground transition-colors"
+            >
+              view full leaderboard &gt;&gt;
+            </Link>
+          </p>
+        </div>
+
+        {/* Bottom Spacer */}
+        <div className="h-15" />
+      </div>
+    </main>
   );
 }
